@@ -121,6 +121,7 @@ define('MEDIA' , 'Media');
 define('NEWS' , 'News');
 define('CONTACT' , 'Contact');
 define('STUDENT' , 'Student');
+define('BOOK' , 'Book');
 
 define('ADMIN_DASHBOARD' , 'admin/Dashboard');
 define('ADMIN_USER' , 'admin/User');

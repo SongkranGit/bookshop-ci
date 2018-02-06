@@ -20,7 +20,29 @@ $role = $this->session->userdata('role_id');
                 </a>
             </li>
 
-            <!--WebPages-->
+            <!--Book-->
+            <li class="treeview  <?= ($controller == BOOK
+                || $controller == USER) ? "active" : "" ?>">
+                <a href="#">
+                    <i class="fa fa-book"></i> <span><?= $this->lang->line("menu_book"); ?></span>
+                    <i class="fa fa-angle-left pull-right"></i>
+                </a>
+                <ul class="treeview-menu">
+                    <li class="<?= (strcasecmp($controller, SETTING) == 0) ? "active" : "" ?>">
+                        <a href="<?= base_url(ADMIN_SETTING) ?>">
+                            <i class="<?= (strcasecmp($controller, SETTING) == 0) ? "fa fa-circle-o text-green" : "fa fa-circle-o" ?>"></i>
+                            <?= $this->lang->line("menu_book_list"); ?>
+                        </a>
+                    </li>
+
+                        <li class="<?= (strcasecmp($controller, USER) == 0) ? "active" : "" ?>">
+                            <a href="<?= base_url(ADMIN_USER) ?>">
+                                <i class="<?= (strcasecmp($controller, USER) == 0) ? "fa fa-circle-o text-green" : "fa fa-circle-o" ?>"></i>
+                                <?= $this->lang->line("menu_book_category"); ?></a>
+                        </li>
+                </ul>
+            </li>
+
 
             <!--Content-->
             <li class="treeview <?= ($controller == ARTICLE
