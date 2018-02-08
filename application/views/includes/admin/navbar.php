@@ -14,30 +14,30 @@ $role = $this->session->userdata('role_id');
             <!--Dashboard-->
             <li class="header"
                 style="color:white;font-size: large; text-align: center"><?= $this->lang->line("menu_main"); ?></li>
-            <li class="<?= (strcasecmp($controller, DASHBOARD) == 0) ? "active" : "" ?>">
+            <li class="<?= ($controller === DASHBOARD) ? "active" : "" ?>">
                 <a href="<?= base_url(ADMIN_DASHBOARD) ?>">
                     <i class="fa fa-dashboard"></i> <span><?= $this->lang->line("menu_dashboard"); ?></span>
                 </a>
             </li>
 
             <!--Book-->
-            <li class="treeview  <?= ($controller == BOOK
-                || $controller == USER) ? "active" : "" ?>">
+            <li class="treeview  <?= ($controller === BOOK
+                || $controller === BOOK_CATEGORY) ? "active" : "" ?>">
                 <a href="#">
                     <i class="fa fa-book"></i> <span><?= $this->lang->line("menu_book"); ?></span>
                     <i class="fa fa-angle-left pull-right"></i>
                 </a>
                 <ul class="treeview-menu">
-                    <li class="<?= (strcasecmp($controller, SETTING) == 0) ? "active" : "" ?>">
-                        <a href="<?= base_url(ADMIN_SETTING) ?>">
-                            <i class="<?= (strcasecmp($controller, SETTING) == 0) ? "fa fa-circle-o text-green" : "fa fa-circle-o" ?>"></i>
+                    <li class="<?= (strcasecmp($controller, BOOK) == 0) ? "active" : "" ?>">
+                        <a href="<?= base_url(ADMIN_BOOK) ?>">
+                            <i class="<?= (strcasecmp($controller, BOOK) == 0) ? "fa fa-circle-o text-green" : "fa fa-circle-o" ?>"></i>
                             <?= $this->lang->line("menu_book_list"); ?>
                         </a>
                     </li>
 
-                        <li class="<?= (strcasecmp($controller, USER) == 0) ? "active" : "" ?>">
-                            <a href="<?= base_url(ADMIN_USER) ?>">
-                                <i class="<?= (strcasecmp($controller, USER) == 0) ? "fa fa-circle-o text-green" : "fa fa-circle-o" ?>"></i>
+                        <li class="<?= (strcasecmp($controller, BOOK_CATEGORY) == 0) ? "active" : "" ?>">
+                            <a href="<?= base_url(ADMIN_BOOK_CATEGORY) ?>">
+                                <i class="<?= (strcasecmp($controller, BOOK_CATEGORY) == 0) ? "fa fa-circle-o text-green" : "fa fa-circle-o" ?>"></i>
                                 <?= $this->lang->line("menu_book_category"); ?></a>
                         </li>
                 </ul>
@@ -45,11 +45,11 @@ $role = $this->session->userdata('role_id');
 
 
             <!--Content-->
-            <li class="treeview <?= ($controller == ARTICLE
-                || $controller == GALLERIES
-                || $controller == GALLERY_IMAGE
-                || $controller == SLIDE_SHOW
-                || $controller == PAGE) ? "active" : "" ?>">
+            <li class="treeview <?= ($controller === ARTICLE
+                || $controller === GALLERIES
+                || $controller === GALLERY_IMAGE
+                || $controller === SLIDE_SHOW
+                || $controller === PAGE) ? "active" : "" ?>">
 
                 <a href="#">
                     <i class="glyphicon glyphicon-pencil"></i> <span><?= $this->lang->line("menu_content"); ?></span>

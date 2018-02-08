@@ -11,14 +11,14 @@
             <div class="container">
 
                 <!-- Online Option -->
-                <div class="online-option">
-                    <ul>
-                        <li><a href="#">online store</a></li>
-                        <li><a href="#">Payment</a></li>
-                        <li><a href="#">shipping</a></li>
-                        <li><a href="#">Return</a></li>
-                    </ul>
-                </div>
+<!--                <div class="online-option">-->
+<!--                    <ul>-->
+<!--                        <li><a href="#">online store</a></li>-->
+<!--                        <li><a href="#">Payment</a></li>-->
+<!--                        <li><a href="#">shipping</a></li>-->
+<!--                        <li><a href="#">Return</a></li>-->
+<!--                    </ul>-->
+<!--                </div>-->
                 <!-- Online Option -->
 
                 <!-- Social Icons -->
@@ -36,7 +36,7 @@
                 <div class="cart-option">
                     <ul>
                         <li class="add-cart"><a href="#"><i class="fa fa-shopping-bag"></i><span>3</span></a></li>
-                        <li><a href="#"><i class="fa fa-heart-o"></i>wish List 0 items</a></li>
+<!--                        <li><a href="#"><i class="fa fa-heart-o"></i>wish List 0 items</a></li>-->
                         <li><a href="#" data-toggle="modal" data-target="#login-modal"><i class="fa fa-user"></i>Login / Register</a></li>
                     </ul>
                 </div>
@@ -1031,41 +1031,7 @@
         <!-- Best Seller Products -->
 
         <!-- Add Banners -->
-        <section class="add-banners-holder tc-padding-bottom">
-            <div class="container">
-                <div class="row">
-
-                    <!-- Banner -->
-                    <div class="col-lg-6 col-sm-12">
-                        <div class="add-banner add-banner-1">
-                            <div class="z-inedex-2 p-relative">
-                                <h3>Celebrate the Book Authors</h3>
-                                <p>How to Write a Book Review Request to Bloggers, a guide for authors</p>
-                                <hr>
-                                <strong class="font-merriweather">Buy Now 280.99 <sup>$</sup></strong>
-                            </div>
-                            <img class="adds-book" src="<?= base_url("assets/frontend/images/add-banners/add-books/img-01.png") ?>" alt="">
-                        </div>
-                    </div>
-                    <!-- Banner -->
-
-                    <!-- Banner -->
-                    <div class="col-lg-6 col-sm-12">
-                        <div class="add-banner add-banner-2">
-                            <div class="z-inedex-2 p-relative">
-                                <strong>Look Books 2016</strong>
-                                <h3>Up to 20% off</h3>
-                                <hr>
-                                <p>of advance enternce exam Books</p>
-                            </div>
-                            <img class="adds-book" src="<?= base_url("assets/frontend/images/add-banners/add-books/img-02.png") ?>" alt="">
-                        </div>
-                    </div>
-                    <!-- Banner -->
-
-                </div>
-            </div>
-        </section>
+v
         <!-- Add Banners -->
 
         <!-- Recomend products -->
@@ -1661,11 +1627,6 @@
         <div class="footer-columns">
             <div class="container">
 
-                <!-- Add banner -->
-                <div class="footer-ad-banner">
-                    <a href="#"><img src="<?= base_url("assets/frontend/images/footer-ad-banner.jpg") ?>" alt=""></a>
-                </div>
-                <!-- Add banner -->
 
                 <!-- Columns Row -->
                 <div class="row">
@@ -1829,14 +1790,14 @@
         <div class="modal-content">
             <button class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
             <div id="magazine">
-                <div style="background-image:url(images/pages/01.jpg);"></div>
-                <div style="background-image:url(images/pages/02.jpg);"></div>
-                <div style="background-image:url(images/pages/03.jpg);"></div>
-                <div style="background-image:url(images/pages/04.jpg);"></div>
-                <div style="background-image:url(images/pages/04.jpg);"></div>
-                <div style="background-image:url(images/pages/05.jpg);"></div>
-                <div style="background-image:url(images/pages/05.jpg);"></div>
-                <div style="background-image:url(images/pages/06.jpg);"></div>
+<!--                <div style="background-image:url(../images/pages/01.jpg);"></div>-->
+<!--                <div style="background-image:url(images/pages/02.jpg);"></div>-->
+<!--                <div style="background-image:url(images/pages/03.jpg);"></div>-->
+<!--                <div style="background-image:url(images/pages/04.jpg);"></div>-->
+<!--                <div style="background-image:url(images/pages/04.jpg);"></div>-->
+<!--                <div style="background-image:url(images/pages/05.jpg);"></div>-->
+<!--                <div style="background-image:url(images/pages/05.jpg);"></div>-->
+<!--                <div style="background-image:url(images/pages/06.jpg);"></div>-->
             </div>
         </div>
     </div>
@@ -1938,9 +1899,7 @@
 </div>
 <!-- Quick View -->
 
-<!-- Switcher  Panel -->
-<div class="switcher"></div>
-<!-- Switcher Panel -->
+
 
 
 

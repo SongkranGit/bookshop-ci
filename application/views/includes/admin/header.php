@@ -127,29 +127,6 @@
                         </a>
                     </li>
                     <li class="divider-vertical"></li>
-                    <li class="dropdown tasks-menu">
-                        <!--Select Language-->
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                            <?php if ($this->session->userdata('language') == "thai") { ?>
-                                <img width="22" height="22" src="<?= base_url("assets/images/flags/th.png") ?>">
-                            <?php } else { ?>
-                                <img width="22" height="22" src="<?= base_url("assets/images/flags/en.png") ?>">
-                            <?php } ?>
-                            <span class="hidden-xs"> <?= $this->lang->line("language"); ?></span>
-                        </a>
-                        <ul class="dropdown-menu lang-selection">
-                            <?php if ($this->session->userdata('language') == "thai") { ?>
-                                <li><a href="<?= base_url("admin/setting/switchLanguage/english") ?>">
-                                        <img width="22" height="22" src="<?= base_url("assets/images/flags/en.png") ?>">&nbsp;Eng</a>
-                                </li>
-                            <?php } else { ?>
-                                <li><a href="<?= base_url("admin/setting/switchLanguage/thai") ?>">
-                                        <img width="22" height="22" src="<?= base_url("assets/images/flags/th.png") ?>">&nbsp;ไทย</a>
-                                </li>
-                            <?php } ?>
-                        </ul>
-                    </li>
-                    <li class="divider-vertical"></li>
                     <li>
                         <a href="<?= base_url("home") ?>" target="_blank">
                             <i class="glyphicon glyphicon-home"></i> <span class="hidden-xs"> <?= $this->lang->line("website"); ?> </span>
