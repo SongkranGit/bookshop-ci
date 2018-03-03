@@ -5,35 +5,51 @@
 <div class="content-wrapper">
     <section class="content-header">
         <h1>
-            <span>หมวดหมู่หนังสือ</span>
+            <span>ผู้แต่ง</span>
         </h1>
         <div class="group-buttons-right">
             <ul class="nav nav-pills ">
                 <li>
-                    <a href="<?= base_url(ADMIN_BOOK_CATEGORY) ?>"> <i class="fa fa-list"></i> รายการหมวดหมู่หนังสือ</a>
+                    <a href="<?= base_url(ADMIN_AUTHOR) ?>"> <i class="fa fa-list"></i> รายการผู้แต่ง</a>
                 </li>
             </ul>
         </div>
     </section>
 
     <section class="content">
-        <form id="form_book_category_entry" role="form" class="form-horizontal">
+        <form id="form_author_entry" role="form" class="form-horizontal">
             <div class="panel panel-default">
                 <div class="panel-heading <?php echo setHeaderClass($data['action']) ?>">
                 <span>
                     <i class="<?php echo setHeaderIcon($data['action']) ?>"></i>
-                    <?php echo $data['action'] === 'create' ? "เพิ่มหมวดหมู่หนังสือ" : "แก้ไขหมวดหมู่หนังสือ" ?>
+                    <?php echo $data['action'] === 'create' ? "เพิ่มผูัแต่ง" : "แก้ไขผู้แต่ง" ?>
                 </span>
                 </div>
 
                 <div class="panel-body">
 
                     <div class="form-group required">
-                        <label class="col-md-2  control-label">ชื่อหมวดหมู่</label>
-                        <div class="col-md-7">
-                            <input type="text" id="name" name="name" placeholder="ชื่อหมวดหมู่หนังสือ"
+                        <label class="col-md-2  control-label">ชื่อ</label>
+                        <div class="col-md-8">
+                            <input type="text" id="first_name" name="first_name" placeholder="ชื่อ"
                                    class="form-control"
-                                   value="<?php echo setFormData($data, $key = "name"); ?>">
+                                   value="<?php echo setFormData($data, $key = "first_name"); ?>">
+                        </div>
+                    </div>
+                    <div class="form-group required">
+                        <label class="col-md-2  control-label">นามสกุล</label>
+                        <div class="col-md-8">
+                            <input type="text" id="last_name" name="last_name" placeholder="นามสกุล"
+                                   class="form-control"
+                                   value="<?php echo setFormData($data, $key = "last_name"); ?>">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-md-2  control-label">อีเมล์</label>
+                        <div class="col-md-8">
+                            <input type="text" id="email" name="email" placeholder="อีเมล์"
+                                   class="form-control"
+                                   value="<?php echo setFormData($data, $key = "email"); ?>">
                         </div>
                     </div>
 
@@ -41,7 +57,7 @@
                 <div class="panel-footer">
                     <div class="pull-right">
                         <?= buttonSubmitCreateOrUpdate($data["action"]); ?>
-                        <?= buttonCancelWithRedirectPage("admin/bookCategory"); ?>
+                        <?= buttonCancelWithRedirectPage("admin/author"); ?>
                     </div>
                     <div class="clearfix"></div>
                 </div>
@@ -67,12 +83,14 @@
         $.validator.setDefaults({
             ignore: ""
         });
-        validator = $('#form_book_category_entry').validate({
+        validator = $('#form_author_entry').validate({
             rules: {
-                name: "required"
+                first_name: "required",
+                last_name: "required"
             },
             messages: {
-                name: '<?php echo $this->lang->line("message_this_field_is_require");?>'
+                first_name: '<?php echo $this->lang->line("message_this_field_is_require");?>',
+                last_name: '<?php echo $this->lang->line("message_this_field_is_require");?>'
             },
             highlight: function (element) {
                 $(element).closest('.form-group').addClass('has-error');
@@ -101,9 +119,9 @@
         var id = '<?=$this->uri->segment(4)?>';
 
         if (id === "") {
-            targetUrl = BASE_URL + 'admin/bookCategory/create';
+            targetUrl = BASE_URL + 'admin/author/create';
         } else {
-            targetUrl = BASE_URL + 'admin/bookCategory/update/' + id;
+            targetUrl = BASE_URL + 'admin/author/update/' + id;
         }
 
         showSpinner();
@@ -111,7 +129,7 @@
         $.ajax({
             type: 'POST',
             url: targetUrl,
-            data: $("#form_book_category_entry").serialize(),
+            data: $("#form_author_entry").serialize(),
             dataType: 'json',
             success: function (response) {
                 hideSpinner();
@@ -121,7 +139,7 @@
                         '<?=$this->lang->line("message_save_complete");?>', function () {
                             var id = '<?=$this->uri->segment(4)?>';
                             if (id != 0 && id != '') {
-                                window.location = BASE_URL + 'admin/bookCategory/index';
+                                window.location = BASE_URL + 'admin/author/index';
                             } else {
                                 clearForm();
                             }
@@ -147,7 +165,7 @@
     }
 
     function clearForm() {
-        window.location = BASE_URL + 'admin/bookCategory/create';
+        window.location = BASE_URL + 'admin/author/create';
     }
 
 </script>

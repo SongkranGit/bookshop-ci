@@ -5,7 +5,7 @@
     <meta http-equiv="content-type" content="text/html; charset=utf-8" />
     <meta name="author" content=""/>
     <!-- Document Title -->
-    <title>Bookstore HTML5 Template</title>
+    <title><?php echo $title ?></title>
 
     <!-- StyleSheets -->
     <link rel="stylesheet" href="<?= base_url("assets/frontend/css/bootstrap/bootstrap.min.css") ?>">

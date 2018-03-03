@@ -123,6 +123,7 @@ define('CONTACT' , 'contact');
 define('STUDENT' , 'student');
 define('BOOK' , 'book');
 define('BOOK_CATEGORY' , 'bookCategory');
+define('AUTHOR' , 'author');
 
 define('ADMIN_DASHBOARD' , 'admin/dashboard');
 define('ADMIN_USER' , 'admin/user');
@@ -145,6 +146,7 @@ define('ADMIN_NEWS' , 'admin/news');
 define('ADMIN_CONTACT' , 'admin/contact');
 define('ADMIN_BOOK' , 'admin/book');
 define('ADMIN_BOOK_CATEGORY' , 'admin/bookCategory');
+define('ADMIN_AUTHOR' , 'admin/author');
 
 define('PATH_UPLOADS' , realpath(APPPATH . '../uploads/' ));
 define('IMAGE_GALLERY_WIDTH' , 1280);

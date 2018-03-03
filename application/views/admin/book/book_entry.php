@@ -3,50 +3,42 @@
 
 <link href="<?= base_url("assets/libraries/jquery-filer/css/jquery.filer.css") ?>" type="text/css" rel="stylesheet">
 <link href="<?= base_url("assets/libraries/jquery-filer/css/themes/jquery.filer-dragdropbox-theme.css") ?>" type="text/css" rel="stylesheet">
-<link href="<?= base_url("assets/libraries/dropzone/min/dropzone.min.css") ?>" type="text/css" rel="stylesheet">
-<script type="text/javascript" src="<?= base_url("assets/libraries/dropzone/min/dropzone.min.js") ?>"></script>
 <script type="text/javascript" src="<?= base_url("assets/libraries/jquery-filer/js/jquery.filer.min.js?v=1.0.5") ?>"></script>
-<style>
-    .dropzone {
-        background: #fff;
-        border: 2px dashed #ddd;
-    }
-</style>
 
 <div class="content-wrapper">
     <section class="content-header">
         <h1>
-            <span><?= $this->lang->line("article_title"); ?></span>
+            <span>หนังสือ</span>
         </h1>
         <div class="group-buttons-right">
             <ul class="nav nav-pills ">
                 <li>
-                    <a href="<?= base_url(ADMIN_ARTICLE) ?>"> <i class="fa fa-list"></i><?= $this->lang->line("article_list"); ?></a>
+                    <a href="<?= base_url(ADMIN_BOOK) ?>"> <i class="fa fa-list"></i>รายการหนังสือ</a>
                 </li>
             </ul>
         </div>
     </section>
 
     <section class="content">
-        <form id="form_article_entry" role="form" class="form-horizontal">
+        <form id="form_book_entry" role="form" class="form-horizontal">
             <div class="panel panel-default">
-                <div class="panel-heading <?php echo setHeaderClass($data['action'])?>">
+                <div class="panel-heading <?php echo setHeaderClass($data['action']) ?>">
                 <span>
-                    <i class="<?php echo setHeaderIcon($data['action'])?>"></i>
-                    <?= $data["heading_text"] ?>
+                    <i class="<?php echo setHeaderIcon($data['action']) ?>"></i>
+                    <?php echo $data['action'] === 'create' ? "เพิ่มหนังสือ" : "แก้ไขหนังสือ" ?>
                 </span>
                 </div>
 
                 <div class="panel-body">
                     <div class="form-group ">
-                        <label class="col-sm-2 control-label"><?= $this->lang->line("web_page"); ?></label>
+                        <label class="col-sm-2 control-label">หมวดหมู่หนังสือ</label>
                         <div class="col-md-7">
                             <div class="col-md-5 input-group dateinput-group date">
-                                <select class="form-control" id="page_id" name="page_id">
-                                    <?php if (!empty($data["pages"]) && count($data["pages"]) > 0): ?>
-                                        <?php foreach ($data["pages"] as $item): ?>
-                                            <option value="<?= $item["id"] ?>" <?= isset($data["row"]["page_id"]) && $data["row"]["page_id"] == $item["id"] ? "selected" : "" ?> >
-                                                <?php echo isEnglishLang() ? $item["name_en"] : $item["name_th"] ?></option>
+                                <select class="form-control" id="book_category_id" name="book_category_id">
+                                    <?php if (!empty($data["book_categories"]) && count($data["book_categories"]) > 0): ?>
+                                        <?php foreach ($data["book_categories"] as $item): ?>
+                                            <option value="<?= $item["id"] ?>" <?= isset($data["row"]["id"]) && $data["row"]["id"] == $item["id"] ? "selected" : "" ?> >
+                                                <?php echo $item["name"] ?></option>
                                         <?php endforeach; ?>
                                     <?php endif; ?>
                                 </select>
@@ -55,7 +47,16 @@
                     </div>
 
                     <div class="form-group required">
-                        <label class="col-md-2  control-label"><?= $this->lang->line("article_publish_date"); ?></label>
+                        <label class="col-md-2  control-label">ชื่อหนังสือ</label>
+                        <div class="col-md-8">
+                            <input type='text' class="form-control" name="book_name"
+                                   value="<?php echo setFormData($data, $key = "book_name") ?>"/>
+                        </div>
+                    </div>
+
+
+                    <div class="form-group required">
+                        <label class="col-md-2  control-label">วันที่เผยแพร่</label>
                         <div class="col-md-7">
                             <div class='col-md-5 input-group date' id='datetimepicker_published_date'>
                                 <input type='text' class="form-control" name="published_date"
@@ -66,86 +67,50 @@
                         </div>
                     </div>
 
-
-                    <div class="form-group ">
-                        <label class="col-md-2  control-label"><?= $this->lang->line("content"); ?></label>
+                    <div class="form-group required">
+                        <label class="col-md-2  control-label"><?= $this->lang->line("description"); ?></label>
                         <div class="col-md-8">
-                            <ul class="nav nav-tabs">
-                                <li role="presentation" class="active"><a href="#tab1" aria-controls="tab1" data-toggle="tab">ไทย</a></li>
-                                <li role="presentation"><a href="#tab2" aria-controls="tab2"  data-toggle="tab">English</a></li>
-                            </ul>
-                            <div class="tab-content">
-                                <!--TAB Thai-->
-                                <div class="tab-pane active" id="tab1">
-                                    <br>
-                                    <div class="form-group required ">
-                                        <label class="col-md-12 label-required "><?= $this->lang->line("article_name"); ?></label>
-                                        <div class="col-md-12">
-                                            <input type="text" id="name_th" name="name_th" placeholder="ชื่อบทความ"
-                                                   class="form-control"
-                                                   value="<?php echo setFormData($data, $key = "name_th"); ?>">
-                                        </div>
-                                    </div>
-                                    <div class="form-group required ">
-                                        <label class="col-sm-12 label-required" for="TextArea"><?= $this->lang->line("description"); ?></label>
-                                        <div class="col-md-12">
-                                             <textarea id="description_th" name="description_th"
-                                                       placeholder="คำอธิบาย"
-                                                       class="form-control"
-                                                       rows="3"><?php echo setFormData($data, $key = "description_th"); ?></textarea>
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="col-md-12 " for="body"><?= $this->lang->line("detail"); ?></label>
-                                        <div class="col-md-12 ">
-                                            <textarea name="detail_th" id="detail_th" class="form-control" rows="5"><?php echo setFormData($data, $key = "detail_th"); ?></textarea>
-                                        </div>
-                                    </div>
-                                </div>
-                                <!--TAB Eng-->
-                                <div class="tab-pane fade" id="tab2">
-                                    <br>
-                                    <div class="form-group required ">
-                                        <label class="col-md-12 label-required"><?= $this->lang->line("article_name"); ?></label>
-                                        <div class="col-md-12">
-                                            <input type="text" id="name_en" name="name_en" placeholder="Article name"
-                                                   class="form-control"
-                                                   value="<?php echo setFormData($data, $key = "name_en"); ?>">
-                                        </div>
-
-                                    </div>
-                                    <div class="form-group required">
-                                        <label class="col-sm-12 label-required" for="TextArea"><?= $this->lang->line("description"); ?></label>
-                                        <div class="col-md-12">
-                                             <textarea id="description_en" name="description_en"
-                                                       placeholder="Article decription"
-                                                       class="form-control"
-                                                       rows="3"><?php echo setFormData($data, $key = "description_en"); ?></textarea>
-                                        </div>
-                                    </div>
-
-                                    <div class="form-group">
-                                        <label class="col-md-12" for="body_en"><?= $this->lang->line("detail"); ?></label>
-                                        <div class="col-md-12">
-                                        <textarea name="detail_en" id="detail_en" class="form-control" rows="5"><?php echo setFormData($data, $key = "detail_en"); ?></textarea>
-                                        </div>
-                                    </div>
-
-                                </div>
-                            </div>
-
+                            <textarea id="description_th" name="description"
+                                      placeholder="คำอธิบาย"
+                                      class="form-control"
+                                      rows="3"><?php echo setFormData($data, $key = "description"); ?></textarea>
                         </div>
                     </div>
 
-                    <div class="form-group " id="div_upload">
-                        <label class="col-md-2  control-label"><?= $this->lang->line("upload_image"); ?></label>
-                        <div class="col-md-8">
-                            <div id="dZUpload" class="dropzone" >
-                                <div class="dz-default dz-message"></div>
-                            </div>
+                    <div class="form-group required">
+                        <label class="col-md-2  control-label">ราคา</label>
+                        <div class="col-md-3">
+                            <input type='number' class="form-control" name="price"
+                                   value="<?php echo setFormData($data, $key = "price") ?>"/>
                         </div>
                     </div>
 
+                    <div class="form-group required ">
+                        <label class="col-md-2  control-label">อับโหลดหนังสือ</label>
+                        <div class="col-md-8">
+                            <input class="form-control" type="file" name="book_file" id="book_file"
+                                   multiple="multiple"
+                                   value="<?php echo setFormData($data, $key = "download_path_file"); ?>">
+                            <div id="div_image"></div>
+                        </div>
+                    </div>
+
+                    <div class="form-group required ">
+                        <label class="col-md-2  control-label">ปกหนังสือ</label>
+                        <div class="col-md-8">
+                            <input class="form-control" type="file" name="cover_image_file" id="cover_image_file"
+                                   value="<?php echo setFormData($data, $key = "cover_image"); ?>">
+                            <div id="div_image"></div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-md-2  control-label">จำนวนหน้าทั้งหมด</label>
+                        <div class="col-md-3">
+                            <input type='number' class="form-control" name="page_count"
+                                   value="<?php echo setFormData($data, $key = "page_count") ?>"/>
+                        </div>
+                    </div>
 
                     <div class="form-group ">
                         <label class="col-md-2 control-label"><?= $this->lang->line("form_field_published"); ?></label>
@@ -163,7 +128,7 @@
                 <div class="panel-footer">
                     <div class="pull-right">
                         <?= buttonSubmitCreateOrUpdate($data["action"]); ?>
-                        <?= buttonCancelWithRedirectPage("admin/Article/index"); ?>
+                        <?= buttonCancelWithRedirectPage("admin/book/index"); ?>
                     </div>
                     <div class="clearfix"></div>
                 </div>
@@ -182,9 +147,9 @@
 
     $(document).ready(function () {
 
-        setupTinymce();
+        setupFileInputBookDownload();
 
-        setupDropzone();
+        setupFileInputCoverImage();
 
         setupDatePicker();
 
@@ -192,8 +157,90 @@
 
         showDetail();
 
-
     });
+
+    function setupFileInputBookDownload() {
+        $('#book_file').filer({
+            limit: null,
+            maxSize: null,
+            extensions: null,
+            extensions: ['pdf'],
+            changeInput: true,
+            showThumbs: true,
+            captions: {button: 'Browse', feedback: ''},
+            addMore: false,
+        });
+    }
+
+    function setupFileInputCoverImage() {
+        $('#cover_image_file').filer({
+            limit: null,
+            maxSize: null,
+            extensions: null,
+            extensions: ['jpg', 'jpeg', 'png'],
+            changeInput: true,
+            showThumbs: true,
+            captions: {button: 'Browse', feedback: ''},
+            addMore: false,
+            templates: {
+                box: '<ul class="jFiler-items-list jFiler-items-grid"></ul>',
+                item: '<li class="jFiler-item">\
+                        <div class="jFiler-item-container">\
+                            <div class="jFiler-item-inner">\
+                                <div class="jFiler-item-thumb">\
+                                    <div class="jFiler-item-status"></div>\
+                                    <div class="jFiler-item-info">\
+                                        <span class="jFiler-item-title"><b title="{{fi-name}}">{{fi-name | limitTo: 25}}</b></span>\
+                                        <span class="jFiler-item-others">{{fi-size2}}</span>\
+                                    </div>\
+                                    {{fi-image}}\
+                                </div>\
+                                <div class="jFiler-item-assets jFiler-row">\
+                                    <ul class="list-inline pull-left">\
+                                        <li>{{fi-progressBar}}</li>\
+                                    </ul>\
+                                    <ul class="list-inline pull-right">\
+                                        <li><a class="icon-jfi-trash jFiler-item-trash-action"></a></li>\
+                                    </ul>\
+                                </div>\
+                            </div>\
+                        </div>\
+                    </li>',
+                itemAppend: '<li class="jFiler-item">\
+                            <div class="jFiler-item-container">\
+                                <div class="jFiler-item-inner">\
+                                    <div class="jFiler-item-thumb">\
+                                        <div class="jFiler-item-status"></div>\
+                                        <div class="jFiler-item-info">\
+                                            <span class="jFiler-item-title"><b title="{{fi-name}}">{{fi-name | limitTo: 25}}</b></span>\
+                                            <span class="jFiler-item-others">{{fi-size2}}</span>\
+                                        </div>\
+                                       \
+                                    </div>\
+                                    <div class="jFiler-item-assets jFiler-row">\
+                                        <ul class="list-inline pull-left">\
+                                            <li><span class="jFiler-item-others">{{fi-icon}}</span></li>\
+                                        </ul>\
+                                        <ul class="list-inline pull-right">\
+                                            <li><a class="icon-jfi-trash jFiler-item-trash-action"></a></li>\
+                                        </ul>\
+                                    </div>\
+                                </div>\
+                            </div>\
+                        </li>',
+                progressBar: '<div class="bar"></div>',
+                itemAppendToEnd: false,
+                removeConfirmation: true,
+                _selectors: {
+                    list: '.jFiler-items-list',
+                    item: '.jFiler-item',
+                    progressBar: '.bar',
+                    remove: '.jFiler-item-trash-action'
+                }
+            }
+        });
+    }
+
 
     function setupDatePicker() {
         $('#datetimepicker_published_date').datetimepicker({
@@ -203,147 +250,24 @@
         });
     }
 
-    function setupTinymce() {
-        var external_filemanager_path = '<?=base_url("assets")?>/libraries/filemanager/';
-        var filemanager = '<?=base_url("assets/libraries/filemanager/plugin.min.js")?>';
-        tinymce.init({
-            selector: "#detail_th,#detail_en", theme: "modern", height: 200,
-            relative_urls: false,
-            remove_script_host: false,
-            convert_urls: true,
-            setup: function (editor) {
-                editor.on('change', function () {
-                    editor.save();
-                });
-                if($('#'+editor.id).attr('readonly'))
-                    editor.settings.readonly = true;
-            },
-            plugins: [
-                "advlist autolink link image lists charmap print preview hr anchor pagebreak",
-                "searchreplace wordcount visualblocks visualchars insertdatetime media nonbreaking",
-                "table contextmenu directionality emoticons paste textcolor responsivefilemanager code fullscreen"
-            ],
-            toolbar1: "undo redo | bold italic underline | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | styleselect",
-            toolbar2: "| responsivefilemanager | link unlink anchor | image media | forecolor backcolor  | print preview code | fullscreen ",
-            image_advtab: true,
-            external_filemanager_path: external_filemanager_path,
-            filemanager_title: "Responsive Filemanager",
-            external_plugins: {"filemanager": filemanager}
-        });
-    }
-
-    function setupDropzone() {
-        Dropzone.autoDiscover = false;
-        var fileList = new Array();
-        var listSelectedFile = new Array();
-        var i = 0;
-        var myDropzone = $("#dZUpload").dropzone({
-            url: "<?php echo base_url("admin/Article/uploadImages")?>",
-            addRemoveLinks: true,
-            RemoveLinkTemplate: "<div class=\"btn btn-default\" data-dz-remove><i class=\"icon-cross\"></i></div>",
-            init: function () {
-                var thisDropzone = this;
-                var article_id = '<?= isset($data["article_id"]) ? $data["article_id"] : "" ?>';
-                if (article_id != '') {
-                    $.getJSON('<?= base_url("admin/Article/getImagesByArticleId")?>' + '/' + article_id, function (data) {
-                        $.each(data, function (index, val) {
-                            var mockFile = {name: val.image_name, size: val.size};
-                            thisDropzone.createThumbnailFromUrl(mockFile, BASE_URL + "uploads/article/" + val.image_name);
-                            thisDropzone.options.addedfile.call(thisDropzone, mockFile);
-                            thisDropzone.options.thumbnail.call(thisDropzone, mockFile, BASE_URL + "uploads/article/" + val.image_name);
-                            mockFile.previewElement.classList.add('dz-success');
-                            mockFile.previewElement.classList.add('dz-complete');
-
-                            // Add file from server to list
-                            fileList[i] = {"serverFileName": val.image_name, "fileName": val.image_name, "fileId": i};
-                            i++;
-                        });
-                    });
-                }
-            },
-            removedfile: function (file) {
-                var rmvFile = "";
-                for (var f = 0; f < fileList.length; f++) {
-                    if (fileList[f].fileName == file.name) {
-                        rmvFile = fileList[f].serverFileName;
-                    }
-                }
-
-                $.ajax({
-                    type: "post",
-                    url: "<?php echo base_url("admin/Article/deleteImage")?>",
-                    data: {file: rmvFile},
-                    dataType: 'html'
-                });
-
-                listSelectedFile.remove(rmvFile);
-                $('#hd_list_image_uuid').val(listSelectedFile.join(", "));
-
-                var _ref;
-                return (_ref = file.previewElement) != null ? _ref.parentNode.removeChild(file.previewElement) : void 0;
-            },
-            success: function (file, response) {
-                var responseObject = JSON.parse(response);
-                fileList[i] = {"serverFileName": responseObject.serverFileName, "fileName": file.name, "fileId": i};
-                listSelectedFile.push(responseObject.image_uuid);
-                $('#hd_list_image_uuid').val(listSelectedFile.join(", "));
-                i++;
-
-                // Rename after upload
-                var elFileName = file.previewElement.querySelector("[data-dz-name]");
-                elFileName.innerHTML = responseObject.serverFileName;
-                // console.log(responseObject);
-                return file.previewElement.classList.add("dz-success");
-            },
-            error: function (file, response) {
-                file.previewElement.classList.add("dz-error");
-            }
-        });
-
-        //Sort images
-        myDropzone.sortable({
-            items: '.dz-preview',
-            cursor: 'move',
-            opacity: 0.5,
-            containment: '#dZUpload',
-            distance: 20,
-            tolerance: 'pointer',
-            stop: function () {
-                var listOfFileNames = new Array();
-                $('#dZUpload .dz-preview .dz-filename [data-dz-name]').each(function (count, el) {
-                    var name = el.innerHTML;
-                    var remove_extension = name.replace(/\.[^/.]+$/, "");
-                    listOfFileNames.push(remove_extension.trim())
-                    //console.log(listOfFileNames);
-                });
-
-                $('#hd_list_image_uuid').val(listOfFileNames.join(", "));
-                //console.log(listOfFileNames);
-            }
-        });
-
-        $('div.dz-preview .dz-size').hide();
-    }
 
     function validateForm() {
         //Fixed not validate hidden tabs
         $.validator.setDefaults({
             ignore: ""
         });
-        validator = $('#form_article_entry').validate({
+        validator = $('#form_book_entry').validate({
             rules: {
                 published_date: "required",
-                description_en: "required",
-                description_th: "required",
-                name_en: "required",
-                name_th: "required"
+                description: "required",
+                book_name: "required",
+                price: "required"
             },
             messages: {
                 published_date: '<?php echo $this->lang->line("message_this_field_is_require");?>',
-                description_en: '<?php echo $this->lang->line("message_this_field_is_require");?>',
-                description_th: '<?php echo $this->lang->line("message_this_field_is_require");?>',
-                name_en: '<?php echo $this->lang->line("message_this_field_is_require");?>',
-                name_th: '<?php echo $this->lang->line("message_this_field_is_require");?>'
+                description: '<?php echo $this->lang->line("message_this_field_is_require");?>',
+                book_name: '<?php echo $this->lang->line("message_this_field_is_require");?>',
+                price: '<?php echo $this->lang->line("message_this_field_is_require");?>'
             },
             highlight: function (element) {
                 $(element).closest('.form-group').addClass('has-error');
@@ -367,11 +291,11 @@
     }
 
     function showDetail() {
-        var isShowData = '<?=array_key_exists ('is_show_data' , $data)?>';
-        if(isShowData){
-            $("form :input").attr("disabled","disabled");
+        var isShowData = '<?=array_key_exists('is_show_data', $data)?>';
+        if (isShowData) {
+            $("form :input").attr("disabled", "disabled");
             $('#detail_th,#detail_en').prop('readonly', true);
-            $('#dZUpload').css( 'pointer-events', 'none' );
+            $('#dZUpload').css('pointer-events', 'none');
         }
     }
 
@@ -380,9 +304,9 @@
         var id = '<?=$this->uri->segment(4)?>';
 
         if (id === "") {
-            targetUrl = BASE_URL + 'admin/article/create';
+            targetUrl = BASE_URL + 'admin/book/create';
         } else {
-            targetUrl = BASE_URL + 'admin/article/update/' + id;
+            targetUrl = BASE_URL + 'admin/book/update/' + id;
         }
 
         showSpinner();
@@ -390,7 +314,7 @@
         $.ajax({
             type: 'POST',
             url: targetUrl,
-            data: $("#form_article_entry").serialize(),
+            data: $("#form_book_entry").serialize(),
             dataType: 'json',
             success: function (response) {
                 hideSpinner();
@@ -400,7 +324,7 @@
                         '<?=$this->lang->line("message_save_complete");?>', function () {
                             var id = '<?=$this->uri->segment(4)?>';
                             if (id != 0 && id != '') {
-                                window.location = BASE_URL + 'admin/Article/index';
+                                window.location = BASE_URL + 'admin/book/index';
                             } else {
                                 clearForm();
                             }
@@ -426,7 +350,7 @@
     }
 
     function clearForm() {
-        window.location = BASE_URL + 'admin/Article/create';
+        window.location = BASE_URL + 'admin/book/create';
     }
 
 </script>

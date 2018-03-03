@@ -4,7 +4,7 @@
  * Base Admin Class - used for all administration pages
  */
 
-//require_once APPPATH . 'core/MY_controller.php';
+require_once APPPATH . 'core/MY_controller.php';
 
 class Frontend_Controller extends MY_Controller
 {
@@ -16,6 +16,7 @@ class Frontend_Controller extends MY_Controller
         parent::__construct();
 
         $this->load->model("Page_model");
+        $this->load->model("Setting_model");
 
         $this->setConfig();
 
@@ -38,6 +39,15 @@ class Frontend_Controller extends MY_Controller
             $this->session->set_userdata('language', $language);
         }
         $this->lang->load("frontend", $language);
+    }
+
+    public function getTitle(){
+        $setting = $this->Setting_model->getSettings();
+        if($setting != null){
+            return $setting['website_name'];
+        }else{
+            return '';
+        }
     }
 
 

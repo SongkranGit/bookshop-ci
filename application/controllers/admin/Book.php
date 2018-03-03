@@ -11,9 +11,8 @@ class Book extends Admin_Controller
     function __construct()
     {
         parent::__construct();
-//        $this->load->model("Article_model");
-//        $this->load->model("Article_images_model");
-//        $this->load->model("Page_model");
+        $this->load->model("Book_model");
+        $this->load->model("Book_category_model");
         $this->load->library("Uuid");
         $this->upload_path = realpath(APPPATH . '../uploads/book');
 
@@ -30,11 +29,11 @@ class Book extends Admin_Controller
             $view_data = array(
                 "data" => array(
                     "action" => ACTION_CREATE,
-                    "pages" => $this->Page_model->getAll(),
-                    "heading_text" => $this->lang->line("article_title_add")
+                    "book_categories" => $this->Book_category_model->getAll()
                 )
             );
-            $this->load->view("admin/article/article_entry", $view_data);
+
+            $this->load->view("admin/book/book_entry", $view_data);
 
         } else if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $result = array('success' => false, 'messages' => array());
@@ -43,25 +42,27 @@ class Book extends Admin_Controller
 
             if ($this->form_validation->run()) {
                 $data = array(
-                    "page_id" => $this->input->post("page_id"),
-                    "description_th" => $this->input->post("description_th"),
-                    "description_en" => $this->input->post("description_en"),
-                    "name_th" => $this->input->post("name_th"),
-                    "name_en" => $this->input->post("name_en"),
-                    "detail_th" => $this->input->post("detail_th"),
-                    "detail_en" => $this->input->post("detail_en"),
+                    "book_category_id" => $this->input->post("book_category_id"),
+                    "book_name" => $this->input->post("book_name"),
+                    "description" => $this->input->post("description"),
+                    "page_count" => $this->input->post("page_count"),
+                    "price" => $this->input->post("price"),
                     "published" => intval($this->input->post("published")),
                     "published_date" => Calendar::con2MysqlDate($this->input->post("published_date")),
                     "created_date" => Calendar::currentDateTime()
                 );
 
-                $isSuccess = $this->Article_model->save($data);
-                if ($isSuccess) {
-                    $article_id = $this->db->insert_id();
-                    $list_image_uuid = $this->input->post("list_image_uuid");
-                    $this->updateArticleImages($list_image_uuid, $article_id);
-                    $result['success'] = true;
-                }
+                dump($data);
+
+              //  $isSuccess = $this->Book_model->save($data);
+
+//                $arr_upload = $this->doUploadImage($gallery_id);
+//                if (!empty($arr_upload)) {
+//                    if($arr_upload["file_name"] != null && !empty($arr_upload["file_name"])){
+//                        $data["file_name"] = $arr_upload["file_name"];
+//                        $response['success'] = $this->Gallery_images_model->save($data);
+//                    }
+//                }
             } else {
                 foreach ($_POST as $key => $value) {
                     $result['messages'][$key] = form_error($key);
@@ -76,17 +77,16 @@ class Book extends Admin_Controller
     public function update($article_id)
     {
         if ($_SERVER["REQUEST_METHOD"] == "GET") {
-            $arr_result = $this->Article_model->getById($article_id);
+            $arr_result = $this->Book_model->getById($article_id);
             $view_data = array(
                 "data" => array(
                     "action" => ACTION_UPDATE,
-                    "heading_text" => $this->lang->line("article_title_edit"),
                     "pages" => $this->Page_model->getAll(),
                     "article_id" => $article_id,
                     "row" => $arr_result
                 )
             );
-            $this->load->view("admin/article/article_entry", $view_data);
+            $this->load->view("admin/book/book_entry", $view_data);
 
         } else if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
@@ -96,19 +96,18 @@ class Book extends Admin_Controller
 
             if ($this->form_validation->run()) {
                 $data = array(
-                    "page_id" => $this->input->post("page_id"),
-                    "description_th" => $this->input->post("description_th"),
-                    "description_en" => $this->input->post("description_en"),
-                    "name_th" => $this->input->post("name_th"),
-                    "name_en" => $this->input->post("name_en"),
-                    "detail_th" => $this->input->post("detail_th"),
-                    "detail_en" => $this->input->post("detail_en"),
+                    "book_category_id" => $this->input->post("book_category_id"),
+                    "book_name" => $this->input->post("book_name"),
+                    "description" => $this->input->post("description"),
+                    "isbn" => $this->input->post("isbn"),
+                    "page_count" => $this->input->post("page_count"),
+                    "price" => $this->input->post("price"),
                     "published_date" => $this->input->post("published_date"),
                     "published" => intval($this->input->post("published")),
                     "updated_date" => Calendar::currentDateTime()
                 );
 
-                $isSuccess = $this->Article_model->update($data, $article_id);
+                $isSuccess = $this->Book_model->update($data, $article_id);
                 if ($isSuccess) {
                     $list_image_uuid = $this->input->post("list_image_uuid");
                     $this->updateArticleImages($list_image_uuid, $article_id);
@@ -125,37 +124,19 @@ class Book extends Admin_Controller
         }
 
     }
-
-    public function show($id)
-    {
-        if ($id != null) {
-            $arr_result = $this->Article_model->getById($id);
-            $view_data = array(
-                "data" => array(
-                    "action" => ACTION_SHOW,
-                    "heading_text" => $this->lang->line("show_data_info"),
-                    "pages" => $this->Page_model->getAll(),
-                    "is_show_data" => true,
-                    "article_id" => $id,
-                    "row" => $arr_result
-                )
-            );
-            $this->load->view("admin/article/article_entry", $view_data);
-        }
-    }
-
+    
     public function delete($id)
     {
         $result = array('success' => false);
         if ($id != "") {
-            $result['success'] = $this->Article_model->delete($id);
+            $result['success'] = $this->Book_model->delete($id);
             echo json_encode($result);
         }
     }
 
-    public function loadArticlesDataTable()
+    public function loadBooksDataTable()
     {
-        $data = $this->Article_model->loadArticlesDataTable();
+        $data = $this->Book_model->loadBooksDataTable();
         echo json_encode($data);
     }
 
@@ -166,7 +147,7 @@ class Book extends Admin_Controller
             $data = array(
                 "order_seq" => $this->input->post("order_seq")
             );
-            $response["success"] = $this->Article_model->update($data, $this->input->post("rowId"));
+            $response["success"] = $this->Book_model->update($data, $this->input->post("rowId"));
             echo json_encode($response);
         }
     }
@@ -175,8 +156,8 @@ class Book extends Admin_Controller
     {
         $this->load->library('form_validation');
         $this->form_validation->set_rules("published_date", "Publish Date", "trim|required");
-        $this->form_validation->set_rules("name_th", "Name", "trim|required");
-        $this->form_validation->set_rules("description_th", "Description", "trim|required");
+        $this->form_validation->set_rules("book_name", "BookName", "trim|required");
+        $this->form_validation->set_rules("description", "Description", "trim|required");
         $this->form_validation->set_error_delimiters('<p class="text-danger">', '</p>');
     }
 
@@ -192,7 +173,7 @@ class Book extends Admin_Controller
         $this->Article_images_model->deleteByImageName($file);
     }
 
-    public function uploadImages()
+    public function uploadCoverImage()
     {
         if (!empty($_FILES)) {
             //image info
@@ -248,27 +229,6 @@ class Book extends Admin_Controller
         }
     }
 
-    public function getImagesByArticleId($article_id)
-    {
-        if ($article_id != '') {
-            $data = $this->Article_images_model->getImagesByArticleId($article_id);
-            echo json_encode($data);
-        }
-    }
 
-    private function updateArticleImages($list_image_uuid, $article_id)
-    {
-        if (!IsNullOrEmptyString($list_image_uuid)) {
-            $arr_list_image_uuid = explode(',', $list_image_uuid);
-            for ($i = 0; $i < count($arr_list_image_uuid); $i++) {
-                $order = $i;
-                $data_image = array(
-                    "article_id" => $article_id,
-                    "order_seq" => $order + 1
-                );
-                //  echo $arr_list_image_uuid[$i]."::";
-                $this->Article_images_model->updateByImageUUID($data_image, trim($arr_list_image_uuid[$i]));
-            }
-        }
-    }
+
 }

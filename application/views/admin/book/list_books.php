@@ -2,15 +2,15 @@
 <?php $this->load->view("includes/admin/navbar"); ?>
 
 <div class="content-wrapper">
-    <!-- Content Header (article header) -->
+    <!-- Content Header (book header) -->
     <section class="content-header">
         <h1>
-            <span><?= $this->lang->line("article_list"); ?></span>
+            <span>รายการหนังสือ</span>
         </h1>
         <div class="group-buttons-right">
             <ul class="nav nav-pills">
                 <li>
-                    <a href="<?= base_url(ADMIN_ARTICLE . "/create") ?>"> <i class="fa fa-plus-circle fa-1x"></i><?= $this->lang->line("article_button_add"); ?></a>
+                    <a href="<?= base_url(ADMIN_BOOK . "/create") ?>"> <i class="fa fa-plus-circle fa-1x"></i>เพิ่มหนังสือ</a>
                 </li>
             </ul>
         </div>
@@ -40,9 +40,9 @@
                                 <div class="col-md-8">
                                     <select class="form-control" id="page_id" name="page_id">
                                         <option value=""></option>
-                                        <?php if (!empty($pages) && count($pages) > 0): ?>
-                                            <?php foreach ($pages as $item): ?>
-                                                <option value="<?= $item["id"] ?>"><?php echo isEnglishLang() ? $item["name_en"] : $item["name_th"] ?></option>
+                                        <?php if (!empty($book_categories) && count($book_categories) > 0): ?>
+                                            <?php foreach ($book_categories as $item): ?>
+                                                <option value="<?= $item["id"] ?>"><?php echo $item["name"] ?></option>
                                             <?php endforeach; ?>
                                         <?php endif; ?>
                                     </select>
@@ -51,7 +51,7 @@
                         </div>
                         <div class="col-md-3 ">
                             <div class="form-group">
-                                <label class="col-md-4 control-label text-right"><?= $this->lang->line("article_name"); ?> (ไทย)</label>
+                                <label class="col-md-4 control-label text-right"><?= $this->lang->line("book_name"); ?> (ไทย)</label>
                                 <div class="col-md-8">
                                     <input class="form-control" type="text" id="name_th">
                                 </div>
@@ -60,7 +60,7 @@
 
                         <div class="col-md-3 ">
                                 <div class="form-group">
-                                    <label class="col-md-4 control-label text-right"><?= $this->lang->line("article_name"); ?> (English)</label>
+                                    <label class="col-md-4 control-label text-right"><?= $this->lang->line("book_name"); ?> (English)</label>
                                     <div class="col-md-8">
                                         <input class="form-control" type="text" id="name_en">
                                     </div>
@@ -103,14 +103,16 @@
                     <!--Body-->
                     <div class="box-body">
                         <div class="dataTable_wrapper">
-                            <table class="table table-striped table-bordered table-hover " id="articles_datatable">
+                            <table class="table table-striped table-bordered table-hover " id="books_datatable">
                                 <thead>
                                 <tr>
                                     <th><?= $this->lang->line("table_seq"); ?></th>
-                                    <th><?= $this->lang->line("web_page"); ?></th>
-                                    <th><?= $this->lang->line("article_name");?> (ไทย)</th>
-                                    <th><?= $this->lang->line("article_name");?> (English)</th>
-                                    <th><?= $this->lang->line("article_publish_date"); ?></th>
+                                    <th>ปกหนังสือ</th>
+                                    <th>หมวดหมู่หนังสือ</th>
+                                    <th>ชื่อหนังสือ</th>
+                                    <th>จำนวนหน้า</th>
+                                    <th>ลิงค์ดาวน์โหลด</th>
+                                    <th>วันที่่เผยแพร่</th>
                                     <th><?= $this->lang->line("table_order"); ?></th>
                                     <th><?= $this->lang->line("table_record_status"); ?></th>
                                     <th class="text-center">
@@ -140,18 +142,9 @@
 
     var dataTable;
 
-//    $.fn.dataTable.render.ellipsis = function () {
-//        return function ( data, type, row ) {
-//            if(data != null && data != ''){
-//                return type === 'display' && data.length > 10 ? data.substr( 0, 100 ) +'…' : data;
-//            }
-//            return '';
-//        }
-//    };
-
     $(document).ready(function () {
 
-        loadArticlesDataTable();
+        loadBooksDataTable();
 
         setupKeyEnterSearch();
 
@@ -166,12 +159,12 @@
         });
     }
 
-    function loadArticlesDataTable() {
+    function loadBooksDataTable() {
         var columns = [
             {data: null, "sClass": "right", "bSortable": false, "sWidth": "3%"}, //1st column
-            {data: "page_name", "sClass": "text", "sWidth": "10%"},
-            {data: "name_th", "sClass": "text", "sWidth": "15%"},
-            {data: "name_en", "sClass": "text", "sWidth": "15%"},
+            {data: "category", "sClass": "text", "sWidth": "10%"},
+            {data: "book_name", "sClass": "text", "sWidth": "15%"},
+            {data: "page_count", "sClass": "text", "sWidth": "15%"},
             {data: "published_date", "sClass": "text", "sWidth": "10%"},
             {data: "sequence", "sClass": "text", "sWidth": "5%"},
             {data: "status", "sClass": "text", "sWidth": "5%"},
@@ -199,8 +192,8 @@
             }},
             {targets: 7, render: function (data, type, row) {
                 var buttons = '<div class="text-center"> ';
-                buttons += '<a href=<?=base_url(ADMIN_ARTICLE)?>/show/' + row.id + '  class="btn btn-info glyphicon glyphicon-info-sign " data-toggle="tooltip" data-placement="top" title="แสดงข้อมูลรายละเเอียด"></a> ';
-                buttons += '<a href=<?=base_url(ADMIN_ARTICLE)?>/update/' + row.id + '  class="btn btn-warning glyphicon glyphicon-pencil " data-toggle="tooltip" data-placement="top" title="แก้ไขข้อมูล"></a>';
+                buttons += '<a href=<?=base_url(ADMIN_BOOK)?>/show/' + row.id + '  class="btn btn-info glyphicon glyphicon-info-sign " data-toggle="tooltip" data-placement="top" title="แสดงข้อมูลรายละเเอียด"></a> ';
+                buttons += '<a href=<?=base_url(ADMIN_BOOK)?>/update/' + row.id + '  class="btn btn-warning glyphicon glyphicon-pencil " data-toggle="tooltip" data-placement="top" title="แก้ไขข้อมูล"></a>';
                 buttons += ' <a href="javascript:void(0)" onclick=deleteData(' + row.id + ') class="button_delete btn btn-danger glyphicon glyphicon-trash" data-toggle="tooltip" data-placement="top" title="ลบข้อมูล"></a>';
                 buttons += '</div>'
                 return buttons;
@@ -208,10 +201,10 @@
         ];
 
 
-        dataTable = $('#articles_datatable').DataTable({
+        dataTable = $('#books_datatable').DataTable({
             'ajax': {
                 type: "GET",
-                url: BASE_URL + 'admin/article/loadArticlesDataTable',
+                url: BASE_URL + 'admin/book/loadBooksDataTable',
                 dataSrc: 'data'
             },
             "language": {
@@ -239,7 +232,7 @@
     }
 
     function updateOrderSeq(element, rowId) {
-        var targetUrl = BASE_URL + 'admin/Article/updateOrderSeq';
+        var targetUrl = BASE_URL + 'admin/book/updateOrderSeq';
         if (rowId != null && rowId != '') {
             showSpinner();
             $.ajax({
@@ -260,7 +253,7 @@
     }
 
     function deleteData(id) {
-        var targetUrl = BASE_URL + 'admin/Article/delete/' + id;
+        var targetUrl = BASE_URL + 'admin/book/delete/' + id;
         if (id != "") {
             BootstrapDialog.show({
                 title: '<i class="glyphicon glyphicon-warning-sign"></i> Warning',

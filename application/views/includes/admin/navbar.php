@@ -21,8 +21,10 @@ $role = $this->session->userdata('role_id');
             </li>
 
             <!--Book-->
-            <li class="treeview  <?= ($controller === BOOK
-                || $controller === BOOK_CATEGORY) ? "active" : "" ?>">
+            <li class="treeview  <?= ((strcasecmp($controller, BOOK) == 0)
+                || (strcasecmp($controller, BOOK_CATEGORY) == 0)
+                || (strcasecmp($controller, AUTHOR) == 0)
+            ) ? "active" : "" ?>">
                 <a href="#">
                     <i class="fa fa-book"></i> <span><?= $this->lang->line("menu_book"); ?></span>
                     <i class="fa fa-angle-left pull-right"></i>
@@ -35,11 +37,17 @@ $role = $this->session->userdata('role_id');
                         </a>
                     </li>
 
-                        <li class="<?= (strcasecmp($controller, BOOK_CATEGORY) == 0) ? "active" : "" ?>">
-                            <a href="<?= base_url(ADMIN_BOOK_CATEGORY) ?>">
-                                <i class="<?= (strcasecmp($controller, BOOK_CATEGORY) == 0) ? "fa fa-circle-o text-green" : "fa fa-circle-o" ?>"></i>
-                                <?= $this->lang->line("menu_book_category"); ?></a>
-                        </li>
+                    <li class="<?= (strcasecmp($controller, BOOK_CATEGORY) == 0) ? "active" : "" ?>">
+                        <a href="<?= base_url(ADMIN_BOOK_CATEGORY) ?>">
+                            <i class="<?= (strcasecmp($controller, BOOK_CATEGORY) == 0) ? "fa fa-circle-o text-green" : "fa fa-circle-o" ?>"></i>
+                            <?= $this->lang->line("menu_book_category"); ?></a>
+                    </li>
+                    <li class="<?= (strcasecmp($controller, AUTHOR) == 0) ? "active" : "" ?>">
+                        <a href="<?= base_url(ADMIN_AUTHOR) ?>">
+                            <i class="<?= (strcasecmp($controller, AUTHOR) == 0) ? "fa fa-circle-o text-green" : "fa fa-circle-o" ?>"></i>
+                           ผู้แต่ง
+                        </a>
+                    </li>
                 </ul>
             </li>
 
