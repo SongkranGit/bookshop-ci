@@ -3,30 +3,17 @@ Navicat MySQL Data Transfer
 
 Source Server         : MySQL
 Source Server Version : 50505
-Source Host           : localhost:3306
-Source Database       : db_rmsf
+Source Host           : 127.0.0.1:3306
+Source Database       : bookshop
 
 Target Server Type    : MYSQL
 Target Server Version : 50505
 File Encoding         : 65001
 
-Date: 2017-08-11 18:47:25
+Date: 2018-03-07 02:47:32
 */
 
 SET FOREIGN_KEY_CHECKS=0;
-
--- ----------------------------
--- Table structure for app_users
--- ----------------------------
-DROP TABLE IF EXISTS `app_users`;
-CREATE TABLE `app_users` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
--- ----------------------------
--- Records of app_users
--- ----------------------------
 
 -- ----------------------------
 -- Table structure for articles
@@ -55,7 +42,7 @@ CREATE TABLE `articles` (
 -- Records of articles
 -- ----------------------------
 INSERT INTO `articles` VALUES ('1', '1', 'sdfasdf', 'asdfasdf', 'asdfasdf', 'asdfasdf', '<p>asdfasdfasdf</p>', 'asdfasdfasdf', '2017-08-06 00:00:00', null, null, '', '2017-08-06 14:36:10', null, '1');
-INSERT INTO `articles` VALUES ('2', '6', 'ฟหกดฟห', 'sdfasdfa', 'ฟหกดฟหกด', 'sdfasdfa', '<p>ดฟหกดsfasdfasdfasdfasdfasdfasdfassf</p>', '<p>asdfasdfasdfasdfasdf</p>', '2017-08-07 00:00:00', null, null, '', '2017-08-06 22:40:37', '2017-08-09 21:07:38', '0');
+INSERT INTO `articles` VALUES ('2', '6', 'ฟหกดฟห', 'sdfasdfa', 'ฟหกดฟหกด', 'sdfasdfa', '<p>ดฟหกดsfasdfasdfasdfasdfasdfasdfassf</p>', '<p>asdfasdfasdfasdfasdf</p>', '2017-08-07 00:00:00', null, null, '', '2017-08-06 22:40:37', '2017-08-09 21:07:38', '1');
 INSERT INTO `articles` VALUES ('3', '2', 'ชื่อบทความ', 'sdfas', 'คำอธิบาย', 'sdfasdfasdfasdf', '<p>ฟหกดฟหกดฟหกด</p>\r\n<p> </p>\r\n<p> </p>', '<p>asdfasdfasdfasdfasdfasfasdfasdf</p>\r\n<p><img src=\"http://rmsf.dev/uploads/022a4423-c626-4851-8880-5e0faf368c5b.png?1502052343264\" width=\"533\" height=\"200\" /></p>', '2017-08-07 00:00:00', null, null, '', '2017-08-06 22:43:51', '2017-08-06 23:19:01', '0');
 
 -- ----------------------------
@@ -86,9 +73,73 @@ INSERT INTO `article_images` VALUES ('85', null, '70733488-f380-4a1a-836f-7496bf
 INSERT INTO `article_images` VALUES ('86', null, 'c3f4f87e-9ae9-4ac4-98a0-6bc6d8c509eb', 'switzerland_alps_mountains_night_beautiful_landsca', 'c3f4f87e-9ae9-4ac4-98a0-6bc6d8c509eb.jpg', null, '820', '2017-08-06 05:51:48', null);
 INSERT INTO `article_images` VALUES ('88', '2', 'feeb30f9-622a-4e16-889a-2676ce44cebe', 'river_trees_fog_reflection_100440_1920x1080.jpg', 'feeb30f9-622a-4e16-889a-2676ce44cebe.jpg', '2', '778', '2017-08-06 23:03:30', null);
 INSERT INTO `article_images` VALUES ('89', '2', 'a314c053-e0ed-421a-a1a4-5bbff0ef1d4f', 'switzerland_alps_mountains_night_beautiful_landsca', 'a314c053-e0ed-421a-a1a4-5bbff0ef1d4f.jpg', '1', '820', '2017-08-06 23:04:11', null);
-INSERT INTO `article_images` VALUES ('90', '3', '17dacdfe-c541-4310-88f6-99d714d4ec62', 'switzerland_alps_mountains_night_beautiful_landsca', '17dacdfe-c541-4310-88f6-99d714d4ec62.jpg', '1', '820', '2017-08-06 23:17:55', null);
 INSERT INTO `article_images` VALUES ('92', null, 'd2268cc8-45d0-4cea-b7a0-e4a668266116', '1920x1200-wdf_1804851.jpg', 'd2268cc8-45d0-4cea-b7a0-e4a668266116.jpg', null, '562', '2017-08-09 21:14:07', null);
 INSERT INTO `article_images` VALUES ('93', null, '87b00071-0388-4117-bf7c-cae1d0840753', 'hd-liverpool-wallpapers.jpg', '87b00071-0388-4117-bf7c-cae1d0840753.jpg', null, '1222', '2017-08-09 21:18:27', null);
+
+-- ----------------------------
+-- Table structure for authors
+-- ----------------------------
+DROP TABLE IF EXISTS `authors`;
+CREATE TABLE `authors` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `first_name` varchar(20) DEFAULT NULL,
+  `last_name` varchar(20) DEFAULT NULL,
+  `email` varchar(30) DEFAULT NULL,
+  `created_date` datetime NOT NULL,
+  `updated_date` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of authors
+-- ----------------------------
+INSERT INTO `authors` VALUES ('1', '333333', 'หกดหดหดหกดหกด', '666', '2018-02-11 14:43:34', '2018-02-11 15:19:41');
+INSERT INTO `authors` VALUES ('4', 'safasdf', 'saas', 'sfasfsd', '2018-02-11 15:22:45', null);
+INSERT INTO `authors` VALUES ('5', 'sf', 'หกดหกดหกดหกดหกดหกด', 'หกดหกด666666', '2018-03-03 10:35:25', '2018-03-03 10:35:39');
+
+-- ----------------------------
+-- Table structure for books
+-- ----------------------------
+DROP TABLE IF EXISTS `books`;
+CREATE TABLE `books` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `book_category_id` int(11) NOT NULL,
+  `book_name` varchar(100) DEFAULT NULL,
+  `description` varchar(1000) DEFAULT NULL,
+  `cover_image` varchar(200) DEFAULT NULL,
+  `isbn` varchar(50) DEFAULT NULL,
+  `page_count` int(5) DEFAULT NULL,
+  `price` decimal(10,0) DEFAULT NULL,
+  `book_file_name` varchar(200) DEFAULT NULL,
+  `published_date` datetime DEFAULT NULL,
+  `order_seq` tinyint(3) DEFAULT NULL,
+  `created_date` datetime NOT NULL,
+  `updated_date` datetime DEFAULT NULL,
+  `is_deleted` tinyint(1) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of books
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for book_categories
+-- ----------------------------
+DROP TABLE IF EXISTS `book_categories`;
+CREATE TABLE `book_categories` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(50) DEFAULT NULL,
+  `created_date` datetime NOT NULL,
+  `updated_date` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of book_categories
+-- ----------------------------
+INSERT INTO `book_categories` VALUES ('1', '6666', '2018-02-10 16:56:06', '2018-02-11 12:19:37');
+INSERT INTO `book_categories` VALUES ('4', 'ฟหดฟหกดฟหกดฟหก', '2018-02-11 09:16:26', '2018-02-11 09:36:10');
 
 -- ----------------------------
 -- Table structure for contacts
@@ -104,7 +155,7 @@ CREATE TABLE `contacts` (
   `created_date` datetime NOT NULL,
   `updated_date` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=28 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=26 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of contacts
@@ -139,7 +190,7 @@ CREATE TABLE `galleries` (
   `updated_date` datetime DEFAULT NULL,
   `is_deleted` tinyint(1) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of galleries
@@ -150,7 +201,8 @@ INSERT INTO `galleries` VALUES ('3', '0', 'เลือกที่นี่เ�
 INSERT INTO `galleries` VALUES ('4', '0', 'ความเหมือนที่แตกต่าง', 'sfsdf', 'เพราะ SPC ไม่ใช่แค่สถาบันกวดวิชาที่ให้แค่ความรู้  แต่ที่ SPC สังคมของเราอบอุ่น เป็นเหมือนบ้าน  เหมือนครอบครัวที่คอยดูแลกันและกัน  เป็นสังคมที่เกื้อกูลกัน  พ่อแม่ดูแลลูก  พี่ดูแลน้องจากรุ่นสู่รุ่น  เพื่อนช่วยเพื่อน  เพื่อที่ทุกคนจะสำเร็จสู่รั้วมหาวิทยาลัยที่ตั้งใจ', 'asdfasdf', '', '3', '2016-07-09 21:34:36', '2017-08-08 01:01:54', '1');
 INSERT INTO `galleries` VALUES ('5', '0', 'SPC พาชมมหาวิทยาลัย', null, 'SPC พาชมมหาวิทยาลัย', null, '', '5', '2017-01-21 00:47:35', '2017-01-21 00:47:35', '1');
 INSERT INTO `galleries` VALUES ('6', '0', 'เด็กผี', '', 'หกดหกดฟหกดหด', '', '', null, '2017-08-08 19:33:44', '2017-08-08 19:33:44', '0');
-INSERT INTO `galleries` VALUES ('7', '3', 'แกลเลอรี่', 'asdf', 'คำอธิบาย', 'sdfasdfsdf', '', null, '2017-08-08 21:30:36', '2017-08-08 22:47:29', '0');
+INSERT INTO `galleries` VALUES ('7', '1', 'แกลเลอรี่', 'asdf', '', '', '\0', null, '2017-08-08 21:30:36', '2018-02-11 09:21:40', '0');
+INSERT INTO `galleries` VALUES ('8', '1', 'กหดฟหกดฟหก', 'หกดฟหกดฟห', 'หกดฟหกด', '', '\0', null, '2018-02-11 09:21:20', '2018-02-11 09:21:20', '0');
 
 -- ----------------------------
 -- Table structure for galleries_images
@@ -302,6 +354,7 @@ CREATE TABLE `settings` (
   `twitter_link` varchar(500) DEFAULT NULL,
   `instagram_link` varchar(500) DEFAULT NULL,
   `line_id` varchar(20) DEFAULT NULL,
+  `fax` varchar(20) DEFAULT NULL,
   `vision_th` text,
   `vision_en` text,
   `created_date` datetime NOT NULL,
@@ -312,7 +365,7 @@ CREATE TABLE `settings` (
 -- ----------------------------
 -- Records of settings
 -- ----------------------------
-INSERT INTO `settings` VALUES ('2', 'RMS FAMELIA', 'RMSF', 'thai', 'studypluscenter.spc@gmail.com', '322/1  รามคำแหง 74 (เยื้องโฮมโปร รามคำแหง) \r\nหัวหมาก  บางกะปิ  กทม. 10240\r\n', '322/1 Ramkhamhang 74 Huamark Bangkapi Bangkok 10240', '02 735 4803-4', '0813187593', 'https://www.facebook.com/StudyPlusCenter/', '', '', '@StudyPlusCenter', '<h2>“Fast track learning”</h2>\r\n<p class=\"text-center\">“ความสำเร็จของคุณคือเป้าหมายของเรา ถ้ามีศักยภาพแต่ยังไม่รู้หนทาง หรือ อาจจะยังไม่รู้ว่าตัวเองมีศักยภาพ ทีมอาจารย์ที่เข้มแข็งของเรา SPC พร้อมโค้ชให้คุณผ่านเส้นทางที่มืดมนนี้ได้สำร็จ ความสำเร็จอาจไม่ได้มาอย่างง่ายดาย ความตั้งใจของคุณบวกกับความชำนาญของเรา SPC จะช่วยพาคุณสู่ความสำเร็จได้”</p>', '<h2>“Fast track learing”</h2>\r\n<p class=\"text-center\">“ Your success is our goal. I do not know if there are potential avenues or may not know that their potential . With our strong team of professors SPC coach you through this dark path for Finished . Success may not come easily . Your intentions , combined with the expertise of our SPC will help lead you to success .”</p>', '2016-04-21 14:52:13', '2017-08-04 21:38:51');
+INSERT INTO `settings` VALUES ('2', 'Book Shop', 'BS', 'thai', 'studypluscenter.spc@gmail.com', '322/1  รามคำแหง 74 (เยื้องโฮมโปร รามคำแหง) \r\nหัวหมาก  บางกะปิ  กทม. 10240\r\n', '322/1 Ramkhamhang 74 Huamark Bangkapi Bangkok 10240', '02 735 4803-4', '0813187593', 'https://www.facebook.com/StudyPlusCenter/', '', '', '@StudyPlusCenter', '55555', '<h2>&ldquo;Fast track learning&rdquo;</h2>\r\n<p class=\"text-center\">&ldquo;ความสำเร็จของคุณคือเป้าหมายของเรา ถ้ามีศักยภาพแต่ยังไม่รู้หนทาง หรือ อาจจะยังไม่รู้ว่าตัวเองมีศักยภาพ ทีมอาจารย์ที่เข้มแข็งของเรา SPC พร้อมโค้ชให้คุณผ่านเส้นทางที่มืดมนนี้ได้สำร็จ ความสำเร็จอาจไม่ได้มาอย่างง่ายดาย ความตั้งใจของคุณบวกกับความชำนาญของเรา SPC จะช่วยพาคุณสู่ความสำเร็จได้&rdquo;</p>', '<h2>&ldquo;Fast track learing&rdquo;</h2>\r\n<p class=\"text-center\">&ldquo; Your success is our goal. I do not know if there are potential avenues or may not know that their potential . With our strong team of professors SPC coach you through this dark path for Finished . Success may not come easily . Your intentions , combined with the expertise of our SPC will help lead you to success .&rdquo;</p>', '2016-04-21 14:52:13', '2018-02-10 08:01:41');
 
 -- ----------------------------
 -- Table structure for slideshow
@@ -360,4 +413,4 @@ CREATE TABLE `users` (
 -- ----------------------------
 INSERT INTO `users` VALUES ('1', 'Super', 'Admin', 'superadmin', '81dc9bdb52d04dc20036dbd8313ed055', 'bsongkran@hotmail.com', '55555', '1', null, '2017-08-11 11:06:26', '2016-05-20 19:04:09', '2016-06-25 11:47:52');
 INSERT INTO `users` VALUES ('2', 'Operation', 'User', 'user', '81dc9bdb52d04dc20036dbd8313ed055', 'pv58@yahoo.com', '0866039101', '3', null, '2017-08-10 17:37:47', '2016-06-02 13:57:50', '2017-08-09 22:27:13');
-INSERT INTO `users` VALUES ('3', 'General', 'Admin', 'admin', '81dc9bdb52d04dc20036dbd8313ed055', 'pv58@yahoo.com', '0866039101', '2', null, '2017-08-10 17:42:27', '2016-06-26 04:09:23', '2017-08-09 22:45:50');
+INSERT INTO `users` VALUES ('3', 'General', 'Admin', 'admin', '81dc9bdb52d04dc20036dbd8313ed055', 'pv58@yahoo.com', '0866039101', '2', null, '2018-03-03 10:34:47', '2016-06-26 04:09:23', '2017-08-09 22:45:50');
