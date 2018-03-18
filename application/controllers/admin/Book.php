@@ -7,6 +7,7 @@ class Book extends Admin_Controller
 {
 
     private $upload_path;
+    private $upload_path_cover_image;
 
     function __construct()
     {
@@ -15,7 +16,7 @@ class Book extends Admin_Controller
         $this->load->model("Book_category_model");
         $this->load->library("Uuid");
         $this->upload_path = realpath(APPPATH . '../uploads/book');
-
+        $this->upload_path_cover_image = realpath(APPPATH . '../uploads/book/cover_image');
     }
 
     public function index()
@@ -54,15 +55,21 @@ class Book extends Admin_Controller
 
                 dump($data);
 
-              //  $isSuccess = $this->Book_model->save($data);
+                // Upload Cover image
+               $cover_image_file_name =  $this->uploadCoverImage();
+               if($cover_image_file_name != ''){
+                   $data["cover_image"] = $cover_image_file_name;
+               }
 
-//                $arr_upload = $this->doUploadImage($gallery_id);
-//                if (!empty($arr_upload)) {
-//                    if($arr_upload["file_name"] != null && !empty($arr_upload["file_name"])){
-//                        $data["file_name"] = $arr_upload["file_name"];
-//                        $response['success'] = $this->Gallery_images_model->save($data);
-//                    }
-//                }
+                // Upload Book
+               $book_file_name = $this->uploadBook();
+               if($book_file_name != ''){
+                    $data["book_file_name"] = $book_file_name;
+               }
+
+                $isSuccess = $this->Book_model->save($data);
+
+
             } else {
                 foreach ($_POST as $key => $value) {
                     $result['messages'][$key] = form_error($key);
@@ -74,16 +81,14 @@ class Book extends Admin_Controller
         }
     }
 
-    public function update($article_id)
+    public function update($book_id)
     {
         if ($_SERVER["REQUEST_METHOD"] == "GET") {
-            $arr_result = $this->Book_model->getById($article_id);
             $view_data = array(
                 "data" => array(
                     "action" => ACTION_UPDATE,
-                    "pages" => $this->Page_model->getAll(),
-                    "article_id" => $article_id,
-                    "row" => $arr_result
+                    "book_categories" => $this->Book_category_model->getAll(),
+                    "book" => $this->Book_model->getById($book_id)
                 )
             );
             $this->load->view("admin/book/book_entry", $view_data);
@@ -107,10 +112,10 @@ class Book extends Admin_Controller
                     "updated_date" => Calendar::currentDateTime()
                 );
 
-                $isSuccess = $this->Book_model->update($data, $article_id);
+                $isSuccess = $this->Book_model->update($data, $book_id);
                 if ($isSuccess) {
                     $list_image_uuid = $this->input->post("list_image_uuid");
-                    $this->updateArticleImages($list_image_uuid, $article_id);
+                    $this->updateArticleImages($list_image_uuid, $book_id);
                     $result['success'] = true;
                 }
             } else {
@@ -173,62 +178,71 @@ class Book extends Admin_Controller
         $this->Article_images_model->deleteByImageName($file);
     }
 
-    public function uploadCoverImage()
+    private function uploadCoverImage()
     {
         if (!empty($_FILES)) {
-            //image info
             $prefix_thumb_image = "thumb_";
             $uuid = $this->uuid->v4();
-            $image_old_name = $_FILES["file"]["name"];
+            $file_post = "cover_image_file";
 
             // config upload
-            $config ['upload_path'] = $this->upload_path;
-            $config ['allowed_types'] = 'gif|jpg|png|jpeg';
+            $config ['upload_path'] = $this->upload_path_cover_image;
+            $config ['allowed_types'] = 'jpg|png|jpeg';
             $config['overwrite'] = FALSE;
             $config['remove_spaces'] = true;
             $config['file_name'] = $uuid;
 
             // load Upload library
             $this->load->library('upload', $config);
-            if (!$this->upload->do_upload("file")) {
+            if (!$this->upload->do_upload($file_post)) {
                 echo $this->upload->display_errors();
             } else {
                 // uploaded data
                 $data_uploaded = $this->upload->data();
 
-                // Create thumb image
+                // Thumbnail Cover Image
                 $new_thumb_image = $prefix_thumb_image . strtolower($data_uploaded["file_name"]);
+                $file_path = $this->upload_path_cover_image . "/" . $new_thumb_image;
                 $this->load->library("SimpleImage");
                 $img = new SimpleImage();
-                $img->load($data_uploaded["full_path"])->thumbnail(500, 380, 'center')->save("uploads/article/" . $new_thumb_image);
+                $img->load($data_uploaded["full_path"])
+                    ->thumbnail(500, 380, 'center')
+                    ->save($file_path);
 
-                // Save to article_images
-                $data = array(
-                    "article_id" => null,
-                    "image_uuid" => $uuid,
-                    "image_old_name" => strtolower($image_old_name),
-                    "image_name" => strtolower($data_uploaded["file_name"]),
-                    "size" => $data_uploaded["file_size"],
-                    "order_seq" => null,
-                    "created_date" => Calendar::currentDateTime()
-                );
-                $this->Article_images_model->save($data);
-
-                //
-                $success_message = array(
-                    'success' => 200,
-                    'image_uuid' => $uuid,
-                    'serverFileName' => strtolower($data_uploaded["file_name"]),
-                    'size' => $data_uploaded["file_size"]
-                );
-
-                echo json_encode($success_message);
+                return $new_thumb_image;
             }
         } else {
             echo "file not found";
+            return "";
         }
     }
 
 
+    private function uploadBook(){
+        if (!empty($_FILES)) {
+            $uuid = $this->uuid->v4();
+            $file_post = "book_file";
+
+            // config upload
+            $config ['upload_path'] = $this->upload_path;
+            $config ['allowed_types'] = 'pdf';
+            $config['overwrite'] = FALSE;
+            $config['remove_spaces'] = true;
+            $config['file_name'] = $uuid;
+
+            // load Upload library
+            $this->load->library('upload', $config);
+            if (!$this->upload->do_upload($file_post)) {
+                echo $this->upload->display_errors();
+            } else {
+                // uploaded data
+                $data_uploaded = $this->upload->data();
+                return $data_uploaded['file_name'];
+            }
+        } else {
+            echo "file not found";
+            return "";
+        }
+    }
 
 }

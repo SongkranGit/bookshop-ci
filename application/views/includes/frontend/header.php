@@ -5,7 +5,7 @@
     <meta http-equiv="content-type" content="text/html; charset=utf-8" />
     <meta name="author" content=""/>
     <!-- Document Title -->
-    <title><?php echo $title ?></title>
+    <title>khunnuchujai</title>
 
     <!-- StyleSheets -->
     <link rel="stylesheet" href="<?= base_url("assets/frontend/css/bootstrap/bootstrap.min.css") ?>">

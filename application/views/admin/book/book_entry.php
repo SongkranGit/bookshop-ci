@@ -91,6 +91,7 @@
                             <input class="form-control" type="file" name="book_file" id="book_file"
                                    multiple="multiple"
                                    value="<?php echo setFormData($data, $key = "download_path_file"); ?>">
+                            <span class="text-danger"> เฉพาะไฟล์ PDF</span>
                             <div id="div_image"></div>
                         </div>
                     </div>
@@ -314,8 +315,10 @@
         $.ajax({
             type: 'POST',
             url: targetUrl,
-            data: $("#form_book_entry").serialize(),
+            data: $("#form_book_entry").serializefiles(),
             dataType: 'json',
+            processData: false,
+            contentType: false,
             success: function (response) {
                 hideSpinner();
                 if (response.success == true) {
